@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -15,7 +17,7 @@ const envTestExample = join(__dirname, '../.env.test.example');
 
 if (!existsSync(publicPem)) {
   writeFileSync(publicPem, new Uint8Array(readFileSync(publicPemExample)));
-  console.log('keys/public.pem created')
+  console.log('keys/public.pem created');
 }
 
 if (!existsSync(privatePem)) {

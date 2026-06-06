@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Debug Server",
       "program": "${workspaceFolder}/build/server.js",
       "preLaunchTask": "tsc: build - tsconfig.json",
       "runtimeArgs": ["-r", "dotenv/config"],
