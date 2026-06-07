@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Debug Server",
       "program": "${workspaceFolder}/build/server.js",
-      "preLaunchTask": "tsc: build - tsconfig.json",
+      "preLaunchTask": "tsc: build - tsconfig.build.json",
       "runtimeArgs": ["-r", "dotenv/config"],
       "outFiles": [
         "${workspaceFolder}/build/*.js",

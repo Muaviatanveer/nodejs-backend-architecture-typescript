@@ -17,7 +17,7 @@ Note: This is the **latest (version 2)** of the project. If you are using **vers
 4. Mongoose
 5. Redis
 6. Mongodb
-7. Joi
+7. zod
 8. Unit Tests & Integration Tests
 9. Docker
 10. JWT

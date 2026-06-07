@@ -1,7 +1,7 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
 export default {
-  sample: Joi.object().keys({
-    key: Joi.string().required().min(1),
+  sample: z.object({
+    key: z.string().min(1),
   }),
 };

@@ -80,7 +80,7 @@ describe('Login basic route', () => {
       }),
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/password length/);
+    expect(response.body.message).toMatch(/password: Too small/);
     expect(response.body.message).toMatch(/6 char/);
     expect(mockUserFindByEmail).not.toHaveBeenCalled();
     expect(bcryptCompareSpy).not.toHaveBeenCalled();

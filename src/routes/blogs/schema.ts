@@ -1,18 +1,18 @@
-import Joi from 'joi';
-import { JoiObjectId } from '../../helpers/validator';
+import z from 'zod';
+import { zObjectId } from '../../helpers/validator';
 
 export default {
-  blogId: Joi.object().keys({
-    id: JoiObjectId().required(),
+  blogId: z.object({
+    id: zObjectId(),
   }),
-  blogTag: Joi.object().keys({
-    tag: Joi.string().required(),
+  blogTag: z.object({
+    tag: z.string(),
   }),
-  pagination: Joi.object().keys({
-    pageNumber: Joi.number().required().integer().min(1),
-    pageItemCount: Joi.number().required().integer().min(1),
+  pagination: z.object({
+    pageNumber: z.coerce.number().int().min(1),
+    pageItemCount: z.coerce.number().int().min(1),
   }),
-  authorId: Joi.object().keys({
-    id: JoiObjectId().required(),
+  authorId: z.object({
+    id: zObjectId(),
   }),
 };

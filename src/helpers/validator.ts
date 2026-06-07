@@ -1,7 +1,6 @@
-import Joi from 'joi';
+import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import { BadRequestError } from '../core/ApiError';
-import { Types } from 'mongoose';
 
 export enum ValidationSource {
   BODY = 'body',
@@ -10,42 +9,41 @@ export enum ValidationSource {
   PARAM = 'params',
 }
 
-export const JoiObjectId = () =>
-  Joi.string().custom((value: string, helpers) => {
-    if (!Types.ObjectId.isValid(value)) return helpers.error('any.invalid');
-    return value;
-  }, 'Object Id Validation');
+/** Validates a 24-character hex MongoDB ObjectId string */
+export const zObjectId = () =>
+  z.string().regex(/^[0-9a-fA-F]{24}$/, 'invalid id');
 
-export const JoiUrlEndpoint = () =>
-  Joi.string().custom((value: string, helpers) => {
-    if (value.includes('://')) return helpers.error('any.invalid');
-    return value;
-  }, 'Url Endpoint Validation');
+/** Validates an "Authorization: Bearer <token>" header value */
+export const zAuthBearer = () =>
+  z.string().regex(/^Bearer\s.+$/, 'invalid bearer token');
 
-export const JoiAuthBearer = () =>
-  Joi.string().custom((value: string, helpers) => {
-    if (!value.startsWith('Bearer ')) return helpers.error('any.invalid');
-    if (!value.split(' ')[1]) return helpers.error('any.invalid');
-    return value;
-  }, 'Authorization Header Validation');
+export const zUrlEndpoint = (maxLength?: number) => {
+  const base = maxLength !== undefined ? z.string().max(maxLength) : z.string();
+  return base.refine((value) => !value.includes('://'), 'invalid url endpoint');
+};
 
+/**
+ *
+ * @param schema  Any z.ZodType (z.object, z.email, z.string, etc.)
+ * @param source  Part of the request to validate (default: 'body')
+ */
 export default (
-    schema: Joi.AnySchema,
+    schema: z.ZodType,
     source: ValidationSource = ValidationSource.BODY,
   ) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { error } = schema.validate(req[source]);
+  (req: Request, _res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req[source]);
 
-      if (!error) return next();
+    if (result.success) return next();
 
-      const { details } = error;
-      const message = details
-        .map((i) => i.message.replace(/['"]+/g, ''))
-        .join(',');
+    // Prepend field name to every Zod default message:
+    //   "Required"       -> "email: Required"
+    const message = result.error.issues
+      .map((issue) => {
+        const field = issue.path?.at(-1);
+        return field ? `${String(field)}: ${issue.message}` : issue.message;
+      })
+      .join(', ');
 
-      next(new BadRequestError(message));
-    } catch (error) {
-      next(error);
-    }
+    next(new BadRequestError(message));
   };

@@ -47,7 +47,7 @@ describe('Writer blog create routes', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/title/i);
-    expect(response.body.message).toMatch(/required/i);
+    expect(response.body.message).toMatch(/received undefined/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });
@@ -63,7 +63,7 @@ describe('Writer blog create routes', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/description/i);
-    expect(response.body.message).toMatch(/required/i);
+    expect(response.body.message).toMatch(/received undefined/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });
@@ -79,7 +79,7 @@ describe('Writer blog create routes', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/text/i);
-    expect(response.body.message).toMatch(/required/i);
+    expect(response.body.message).toMatch(/received undefined/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });
@@ -95,7 +95,7 @@ describe('Writer blog create routes', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/blogUrl/i);
-    expect(response.body.message).toMatch(/required/i);
+    expect(response.body.message).toMatch(/received undefined/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });
@@ -130,7 +130,7 @@ describe('Writer blog create routes', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/imgUrl/i);
-    expect(response.body.message).toMatch(/valid uri/i);
+    expect(response.body.message).toMatch(/valid url/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });
@@ -147,7 +147,7 @@ describe('Writer blog create routes', () => {
       WRITER_ACCESS_TOKEN,
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/must be a number/i);
+    expect(response.body.message).toMatch(/expected number/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });
@@ -164,8 +164,8 @@ describe('Writer blog create routes', () => {
       WRITER_ACCESS_TOKEN,
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/must be/i);
-    expect(response.body.message).toMatch(/array/i);
+    expect(response.body.message).toMatch(/tags/i);
+    expect(response.body.message).toMatch(/expected array/i);
     expect(mockBlogFindUrlIfExists).not.toHaveBeenCalled();
     expect(mockBlogCreate).not.toHaveBeenCalled();
   });

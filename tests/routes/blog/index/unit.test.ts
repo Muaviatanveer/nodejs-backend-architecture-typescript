@@ -32,7 +32,7 @@ describe('BlogDetail by URL route', () => {
     const response = await addHeaders(request.get(endpoint));
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/endpoint/);
-    expect(response.body.message).toMatch(/required/);
+    expect(response.body.message).toMatch(/received undefined/);
     expect(mockPublishedBlogFindByUrl).not.toHaveBeenCalled();
   });
 
@@ -42,7 +42,7 @@ describe('BlogDetail by URL route', () => {
       request.get(endpoint).query({ endpoint: param }),
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/length must/);
+    expect(response.body.message).toMatch(/endpoint: Too big/);
     expect(response.body.message).toMatch(/200/);
     expect(mockPublishedBlogFindByUrl).not.toHaveBeenCalled();
   });
