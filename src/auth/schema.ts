@@ -1,16 +1,10 @@
-import Joi from 'joi';
+import z from 'zod';
 import { Header } from '../core/utils';
-import { JoiAuthBearer } from '../helpers/validator';
+import { zAuthBearer } from '../helpers/validator';
 
 export default {
-  apiKey: Joi.object()
-    .keys({
-      [Header.API_KEY]: Joi.string().required(),
-    })
-    .unknown(true),
-  auth: Joi.object()
-    .keys({
-      authorization: JoiAuthBearer().required(),
-    })
-    .unknown(true),
+  apiKey: z.looseObject({ [Header.API_KEY]: z.string() }),
+  auth: z.looseObject({
+    authorization: zAuthBearer(),
+  }),
 };

@@ -1,12 +1,12 @@
-import Joi from 'joi';
-import { JoiObjectId } from '../../helpers/validator';
+import z from 'zod';
+import { zObjectId } from '../../helpers/validator';
 
 export default {
-  userId: Joi.object().keys({
-    id: JoiObjectId().required(),
+  userId: z.object({
+    id: zObjectId(),
   }),
-  profile: Joi.object().keys({
-    name: Joi.string().min(1).max(200).optional(),
-    profilePicUrl: Joi.string().uri().optional(),
+  profile: z.object({
+    name: z.string().min(1).max(200).optional(),
+    profilePicUrl: z.url().optional(),
   }),
 };

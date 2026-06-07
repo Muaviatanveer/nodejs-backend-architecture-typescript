@@ -1,29 +1,29 @@
-import Joi from 'joi';
-import { JoiObjectId, JoiUrlEndpoint } from '../../helpers/validator';
+import z from 'zod';
+import { zObjectId, zUrlEndpoint } from '../../helpers/validator';
 
 export default {
-  blogUrl: Joi.object().keys({
-    endpoint: JoiUrlEndpoint().required().max(200),
+  blogUrl: z.object({
+    endpoint: zUrlEndpoint(200),
   }),
-  blogId: Joi.object().keys({
-    id: JoiObjectId().required(),
+  blogId: z.object({
+    id: zObjectId(),
   }),
-  blogCreate: Joi.object().keys({
-    title: Joi.string().required().min(3).max(500),
-    description: Joi.string().required().min(3).max(2000),
-    text: Joi.string().required().max(50000),
-    blogUrl: JoiUrlEndpoint().required().max(200),
-    imgUrl: Joi.string().optional().uri().max(200),
-    score: Joi.number().optional().min(0).max(1),
-    tags: Joi.array().optional().min(1).items(Joi.string().uppercase()),
+  blogCreate: z.object({
+    title: z.string().min(3).max(500),
+    description: z.string().min(3).max(2000),
+    text: z.string().max(50000),
+    blogUrl: zUrlEndpoint(200),
+    imgUrl: z.url().max(200).optional(),
+    score: z.number().min(0).max(1).optional(),
+    tags: z.array(z.string().toUpperCase()).min(1).optional(),
   }),
-  blogUpdate: Joi.object().keys({
-    title: Joi.string().optional().min(3).max(500),
-    description: Joi.string().optional().min(3).max(2000),
-    text: Joi.string().optional().max(50000),
-    blogUrl: JoiUrlEndpoint().optional().max(200),
-    imgUrl: Joi.string().optional().uri().max(200),
-    score: Joi.number().optional().min(0).max(1),
-    tags: Joi.array().optional().min(1).items(Joi.string().uppercase()),
+  blogUpdate: z.object({
+    title: z.string().min(3).max(500).optional(),
+    description: z.string().min(3).max(2000).optional(),
+    text: z.string().max(50000).optional(),
+    blogUrl: zUrlEndpoint(200).optional(),
+    imgUrl: z.url().max(200).optional(),
+    score: z.number().min(0).max(1).optional(),
+    tags: z.array(z.string().toUpperCase()).min(1).optional(),
   }),
 };

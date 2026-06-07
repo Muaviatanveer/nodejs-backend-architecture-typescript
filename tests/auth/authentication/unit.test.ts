@@ -38,7 +38,7 @@ describe('authentication validation', () => {
       '123',
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/authorization/);
+    expect(response.body.message).toMatch(/invalid bearer token/);
     expect(getAccessTokenSpy).not.toHaveBeenCalled();
   });
 

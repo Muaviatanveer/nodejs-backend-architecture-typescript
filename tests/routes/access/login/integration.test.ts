@@ -111,7 +111,7 @@ describe('Login basic route', () => {
       apikey,
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/password length/);
+    expect(response.body.message).toMatch(/password: Too small/);
     expect(response.body.message).toMatch(/6 char/);
     expect(userFindByEmailSpy).not.toHaveBeenCalled();
     expect(bcryptCompareSpy).not.toHaveBeenCalled();

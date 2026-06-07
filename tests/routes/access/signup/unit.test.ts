@@ -52,7 +52,7 @@ describe('Signup basic route', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/email/);
-    expect(response.body.message).toMatch(/required/);
+    expect(response.body.message).toMatch(/received undefined/);
     expect(mockUserFindByEmail).not.toHaveBeenCalled();
     expect(bcryptHashSpy).not.toHaveBeenCalled();
     expect(mockUserCreate).not.toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('Signup basic route', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/password/);
-    expect(response.body.message).toMatch(/required/);
+    expect(response.body.message).toMatch(/received undefined/);
     expect(mockUserFindByEmail).not.toHaveBeenCalled();
     expect(bcryptHashSpy).not.toHaveBeenCalled();
     expect(mockUserCreate).not.toHaveBeenCalled();
@@ -86,7 +86,7 @@ describe('Signup basic route', () => {
     );
     expect(response.status).toBe(400);
     expect(response.body.message).toMatch(/name/);
-    expect(response.body.message).toMatch(/required/);
+    expect(response.body.message).toMatch(/received undefined/);
     expect(mockUserFindByEmail).not.toHaveBeenCalled();
     expect(bcryptHashSpy).not.toHaveBeenCalled();
     expect(mockUserCreate).not.toHaveBeenCalled();
@@ -120,7 +120,7 @@ describe('Signup basic route', () => {
       }),
     );
     expect(response.status).toBe(400);
-    expect(response.body.message).toMatch(/password length/);
+    expect(response.body.message).toMatch(/password: Too small/);
     expect(response.body.message).toMatch(/6 char/);
     expect(mockUserFindByEmail).not.toHaveBeenCalled();
     expect(bcryptHashSpy).not.toHaveBeenCalled();
