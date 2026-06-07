@@ -1,4 +1,5 @@
 import express from 'express';
+import health from './health';
 import apikey from '../auth/apikey';
 import permission from '../helpers/permission';
 import { Permission } from '../database/model/ApiKey';
@@ -13,6 +14,8 @@ import profile from './profile';
 
 const router = express.Router();
 
+/*---------------------------------------------------------*/
+router.use('health', health);
 /*---------------------------------------------------------*/
 router.use(apikey);
 /*---------------------------------------------------------*/
