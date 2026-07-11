@@ -1,46 +1,83 @@
-{
-  "verifiedPatch": "---
-import { Repository, EntityRepository } from 'typeorm';
-import { SampleEntity } from '../entity/SampleEntity';
+import { Connection } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-@EntityRepository(SampleEntity)
-export class SampleRepo extends Repository<SampleEntity> {
-  async save(entity: Partial<SampleEntity>): Promise<SampleEntity> {
-    if (!entity.createdAt) {
-      entity.createdAt = new Date();
-    }
-    if (!entity.updatedAt) {
-      entity.updatedAt = new Date();
-    }
-    return super.save(entity);
+@Injectable()
+export class SampleRepo {
+  private readonly repository: Repository<SampleEntity>;
+
+  constructor(private readonly connection: Connection) {
+    this.repository = connection.getRepository(SampleEntity);
   }
 
-  async update(id: number, partialEntity: Partial<SampleEntity>): Promise<void> {
-    if (partialEntity.updatedAt === undefined) {
-      partialEntity.updatedAt = new Date();
+  /**
+   * Finds all entities of type SampleEntity.
+   *
+   * @returns A promise that resolves to an array of SampleEntity objects.
+   */
+  async findAll(): Promise<SampleEntity[]> {
+    try {
+      return await this.repository.find();
+    } catch (error) {
+      throw new Error(`Failed to find all sample entities: ${error.message}`);
     }
-    await super.update(id, partialEntity);
   }
-}
----",
-  "prDescription": "## Pull Request: Address Potential Insecure Default Values for Dates
 
-This pull request addresses a potential security vulnerability identified in the `SampleRepo` class related to insecure default values for dates. 
+  /**
+   * Finds one entity of type SampleEntity by its primary key.
+   *
+   * @param id - The primary key of the entity to find.
+   * @returns A promise that resolves to a SampleEntity object if found, otherwise null.
+   */
+  async findOne(id: number): Promise<SampleEntity | null> {
+    try {
+      return await this.repository.findOne(id);
+    } catch (error) {
+      throw new Error(`Failed to find sample entity with id ${id}: ${error.message}`);
+    }
+  }
 
-**Changes Introduced:**
+  /**
+   * Creates a new entity of type SampleEntity.
+   *
+   * @param entity - The entity data to create.
+   * @returns A promise that resolves to the created SampleEntity object.
+   */
+  async create(entity: Partial<SampleEntity>): Promise<SampleEntity> {
+    try {
+      const newEntity = this.repository.create(entity);
+      return await this.repository.save(newEntity);
+    } catch (error) {
+      throw new Error(`Failed to create sample entity: ${error.message}`);
+    }
+  }
 
-- Implemented safety guards within the `save` and `update` methods of the `SampleRepo` class.
-- These guards ensure that `createdAt` and `updatedAt` fields are populated with the current date and time if not provided by the user. This mitigates the risk of using default values that could be manipulated or lead to unexpected behavior.
+  /**
+   * Updates an existing entity of type SampleEntity.
+   *
+   * @param id - The primary key of the entity to update.
+   * @param entity - The updated entity data.
+   * @returns A promise that resolves to the updated SampleEntity object.
+   */
+  async update(id: number, entity: Partial<SampleEntity>): Promise<SampleEntity> {
+    try {
+      await this.repository.update(id, entity);
+      return await this.repository.findOne(id);
+    } catch (error) {
+      throw new Error(`Failed to update sample entity with id ${id}: ${error.message}`);
+    }
+  }
 
-**Testing Evidence:**
-
-- Unit tests have been updated to verify the correct assignment of `createdAt` and `updatedAt` values during entity creation and updates.
-
-**Risk Profile:**
-
-- **Security:** This change significantly reduces the risk of potential vulnerabilities arising from using insecure default date values.
-- **Performance:** The impact on performance is expected to be minimal, as setting the current date and time is a lightweight operation.
-
-
-"
+  /**
+   * Deletes an entity of type SampleEntity by its primary key.
+   *
+   * @param id - The primary key of the entity to delete.
+   * @returns A promise that resolves when the deletion is complete.
+   */
+  async delete(id: number): Promise<void> {
+    try {
+      await this.repository.delete(id);
+    } catch (error) {
+      throw new Error(`Failed to delete sample entity with id ${id}: ${error.message}`);
+    }
+  }
 }
